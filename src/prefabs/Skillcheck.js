@@ -4,6 +4,8 @@ class Skillcheck extends Phaser.GameObjects.Sprite {
         scene.add.existing(this)
         this.setOrigin(0.5);
         this.scene = scene
+        this.checkDone = false
+        this.checkPassed = false
 
         this.limitLeft = 50+offset
         this.limitRight = 350+offset
@@ -28,9 +30,9 @@ class Skillcheck extends Phaser.GameObjects.Sprite {
 
         if (Phaser.Input.Keyboard.JustDown(this.scene.keys.space)) {
             if (this.slider.x >= 150+offset && this.slider.x <= 250+offset) {
-                console.log("nice")
+                this.checkDone = true
             } else {
-                console.log("oops")
+                this.checkDone = true
             }
         }
 
