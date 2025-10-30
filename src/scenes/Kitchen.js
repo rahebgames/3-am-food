@@ -4,19 +4,23 @@ class Kitchen extends Phaser.Scene {
     }
 
     create() {
-        this.loseCond = false
+        this.checkPassed = false
+        this.checkDone = false
+        
         this.tileSize = 57.25
-
         let playerSize = 56.25
+
         this.add.image(centerX, centerY, "kitchenGrid")
         this.player = this.physics.add.sprite((57.25*6)+(56.25/2)+offset, (56.25/2)+offset, 'spiderman')
-        this.player.setDisplaySize(playerSize, playerSize)
         this.player.body.setSize(500, 500)
+        this.player.setDisplaySize(playerSize, playerSize)
         this.player.setImmovable(true)
 
-        this.keys = this.input.keyboard.createCursorKeys()
+        this.house = this.add.image(centerX, centerY, 'house')
+        this.house.setDisplaySize(400, 400)
+        this.house.visible = false
 
-        this.targetY = this.player.y
+        this.keys = this.input.keyboard.createCursorKeys()
 
         this.addChecks()
     }
@@ -40,11 +44,20 @@ class Kitchen extends Phaser.Scene {
         }
         this.playerTileChecker()
 
-        if (this.check && this.check.checkDone) {
-            //this.check.destroy()
+        if (this.check && this.checkDone) {
+            this.check.delete()
+            this.check = null
+
+            this.pauseTint.destroy()
+            this.pauseTint = null
+
+            this.tileOneCollider.active = false
         }
         if (this.check) {
             this.check.update()
+        }
+        if (!this.checkPassed && this.checkDone) {
+            this.house.visible = true
         }
     }
 
@@ -52,7 +65,7 @@ class Kitchen extends Phaser.Scene {
         this.tile1 = this.add.rectangle((57.25*6)+(56/2)+offset, (56.25/2)+(57.25*3)+offset, 56.25, 56.25, 0x000000, 0)
         this.physics.add.existing(this.tile1, true)
 
-        this.physics.add.collider(this.player, this.tile1, () => {
+        this.tileOneCollider = this.physics.add.collider(this.player, this.tile1, () => {
             if (!this.check) {
                 this.pauseTint = this.add.rectangle(centerX, centerY, 420, 420, 0x000000, 0.5)
                 this.check = new Skillcheck(this, centerX, centerY)

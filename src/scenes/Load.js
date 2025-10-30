@@ -8,6 +8,7 @@ class Load extends Phaser.Scene {
         this.load.image('kitchenGrid', 'kitchenGrid.png')
         this.load.image('spiderman', 'spiderman.png')
         this.load.image('slider', 'slider.png')
+        this.load.image('house', 'house.png')
     }
 
     create() {

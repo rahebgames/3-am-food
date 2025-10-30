@@ -4,20 +4,27 @@ class Skillcheck extends Phaser.GameObjects.Sprite {
         scene.add.existing(this)
         this.setOrigin(0.5);
         this.scene = scene
-        this.checkDone = false
-        this.checkPassed = false
 
         this.limitLeft = 50+offset
         this.limitRight = 350+offset
-        scene.add.rectangle(centerX, centerY, 300, 25, 0xc7c7c7, 1)
-
+        
+        this.bar = scene.add.rectangle(centerX, centerY, 300, 25, 0xc7c7c7, 1)
         this.zone = scene.add.rectangle(centerX, centerY, 50, 25, 0xfafafa, 1)
-
         this.slider = scene.physics.add.sprite(this.limitLeft, centerY, 'slider')
 
         this.speed = 200
         this.slider.body.setVelocityX(this.speed)
 
+    }
+
+    delete() {
+        this.bar.destroy()
+        this.zone.destroy()
+        this.slider.destroy()
+
+        this.bar = null
+        this.zone = null
+        this.slider = null
     }
 
     update() {
@@ -30,9 +37,10 @@ class Skillcheck extends Phaser.GameObjects.Sprite {
 
         if (Phaser.Input.Keyboard.JustDown(this.scene.keys.space)) {
             if (this.slider.x >= 150+offset && this.slider.x <= 250+offset) {
-                this.checkDone = true
+                this.scene.checkPassed = true
+                this.scene.checkDone = true
             } else {
-                this.checkDone = true
+                this.scene.checkDone = true
             }
         }
 
