@@ -21,23 +21,27 @@ class Kitchen extends Phaser.Scene {
         this.house.visible = false
 
         this.keys = this.input.keyboard.createCursorKeys()
+        this.movingDown = false
+        this.movingUp = false
+        this.movingLeft = false
+        this.movingRight = false
 
         this.addChecks()
     }
     update() {
-        if (Phaser.Input.Keyboard.JustDown(this.keys.down)) {
+        if (Phaser.Input.Keyboard.JustDown(this.keys.down) && !this.movingDown) {
             this.targetY = this.player.y + this.tileSize
             this.movingDown = true
             this.player.body.setVelocityY(200)
-        } else if (Phaser.Input.Keyboard.JustDown(this.keys.up)) {
+        } else if (Phaser.Input.Keyboard.JustDown(this.keys.up) && !this.movingUp) {
             this.targetY = this.player.y - this.tileSize
             this.movingUp = true
             this.player.body.setVelocityY(-200)
-        } else if (Phaser.Input.Keyboard.JustDown(this.keys.left)) {
+        } else if (Phaser.Input.Keyboard.JustDown(this.keys.left) && !this.movingLeft) {
             this.targetX = this.player.x - this.tileSize
             this.movingLeft = true
             this.player.body.setVelocityX(-200)
-        } else if (Phaser.Input.Keyboard.JustDown(this.keys.right)) {
+        } else if (Phaser.Input.Keyboard.JustDown(this.keys.right) && !this.movingRight) {
             this.targetX = this.player.x + this.tileSize
             this.movingRight = true
             this.player.body.setVelocityX(200)
