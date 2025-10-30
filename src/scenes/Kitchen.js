@@ -7,6 +7,7 @@ class Kitchen extends Phaser.Scene {
         this.checkPassed = false
         this.checkDone = false
         
+        this.activeTile = null
         this.tileSize = 57.25
         let playerSize = 56.25
 
@@ -55,7 +56,7 @@ class Kitchen extends Phaser.Scene {
             this.pauseTint.destroy()
             this.pauseTint = null
 
-            this.tileOneCollider.active = false
+            this.activeTile.active = false
         }
         if (this.check) {
             this.check.update()
@@ -71,6 +72,18 @@ class Kitchen extends Phaser.Scene {
 
         this.tileOneCollider = this.physics.add.collider(this.player, this.tile1, () => {
             if (!this.check) {
+                this.activeTile = this.tile1
+                this.pauseTint = this.add.rectangle(centerX, centerY, 420, 420, 0x000000, 0.5)
+                this.check = new Skillcheck(this, centerX, centerY)
+            }
+        })
+
+        this.tile2 = this.add.rectangle((57.25*4)+(56/2)+offset, (56.25/2)+(57.25)+offset, 56.25, 56.25, 0x000000, 0)
+        this.physics.add.existing(this.tile2, true)
+
+        this.tileTwoCollider = this.physics.add.collider(this.player, this.tile2, () => {
+            if (!this.check) {
+                this.activeTile = this.tile2
                 this.pauseTint = this.add.rectangle(centerX, centerY, 420, 420, 0x000000, 0.5)
                 this.check = new Skillcheck(this, centerX, centerY)
             }
