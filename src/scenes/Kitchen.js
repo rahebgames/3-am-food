@@ -251,7 +251,7 @@ class Kitchen extends Phaser.Scene {
     }
 
     addSkillChecks() {
-        this.tile1 = this.add.rectangle((this.tileSize*6)+(this.tileSize/2)+offset, (this.tileSize/2)+(this.tileSize*3)+offset, this.tileSize, this.tileSize, 0x000000, 0)
+        this.tile1 = this.add.rectangle((this.tileSize*5)+(this.tileSize/2)+offset, (this.tileSize/2)+(this.tileSize*3)+offset, this.tileSize, this.tileSize, 0x000000, 0)
         this.physics.add.existing(this.tile1, true)
 
         this.tileOneCollider = this.physics.add.overlap(this.player, this.tile1, () => {
