@@ -8,7 +8,7 @@ let config = {
     physics: {
         default: 'arcade',
         arcade: {
-            debug: true
+            debug: false
         }
     },
     scene: [ Load , Kitchen ],
@@ -16,8 +16,11 @@ let config = {
 
 let textConfig = {
     fontFamily: 'Courier',
-    fontSize: '200 px',
     color: '#ffffff',
+    fontSize: '18px',
+    strokeThickness: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.75',
+    padding: { x: 10, y: 5}
 }
 
 let game = new Phaser.Game(config)

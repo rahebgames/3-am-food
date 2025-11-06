@@ -11,13 +11,17 @@ class Kitchen extends Phaser.Scene {
         this.tileSize = 85.71
         let playerSize = 84.71
 
+        this.step = 1
+
         this.addProps()
         this.propActive = false
 
         this.player = this.physics.add.sprite((this.tileSize*6)+(this.tileSize/2)+offset, (this.tileSize/2)+offset, 'spiderman')
-        this.player.body.setSize(700, 1400)
+        this.player.body.setSize(600, 1400)
         this.player.setDisplaySize(playerSize, playerSize)
         this.keys = this.input.keyboard.createCursorKeys()
+
+        this.addHelperText()
 
         this.house = this.add.image(centerX, centerY, 'house')
         this.house.setDisplaySize(w, h)
@@ -25,6 +29,7 @@ class Kitchen extends Phaser.Scene {
 
         this.addPropCollisions()
         this.addSkillChecks()
+        this.stepHandler()
     }
 
     update() {
@@ -34,6 +39,21 @@ class Kitchen extends Phaser.Scene {
             this.player.setVelocity(0)
         }
         this.skillCheckHandler()
+        this.helperTextVisible()
+    }
+
+    addHelperText() {
+        this.helper = false
+        this.helperText = this.add.text(310, 20, 'Press [Space] to interact', textConfig)
+    }
+
+    helperTextVisible() {
+        if (this.helper) {
+            this.helperText.visible = true
+        } else {
+            this.helperText.visible = false
+        }
+        this.helper = false
     }
 
     skillCheckHandler() {
@@ -75,27 +95,15 @@ class Kitchen extends Phaser.Scene {
         this.physics.add.collider(this.player, this.oven)
         this.ovenAction = this.add.rectangle((this.tileSize * 4) + offset, (this.tileSize / 2) + offset+20, (this.tileSize*2), this.tileSize, 0x000000, 0)
         this.physics.add.existing(this.ovenAction, true)
-        this.physics.add.overlap(this.player, this.ovenAction, () => {
-            if (!this.check) {
-                if (Phaser.Input.Keyboard.JustDown(this.keys.space)) {
-                    console.log("hello")
-                }
-            }
-        })
 
         this.sink.setImmovable(true)
         this.physics.add.collider(this.player, this.sink)
         this.sinkAction = this.add.rectangle((this.tileSize / 2) + offset+10, (this.tileSize * 2) + offset+10, this.tileSize, (this.tileSize*2), 0x000000, 0)
         this.physics.add.existing(this.sinkAction, true)
-        this.physics.add.overlap(this.player, this.sinkAction, () => {
-            if (Phaser.Input.Keyboard.JustDown(this.keys.space)) {
-                console.log("hello")
-            }
-        })
 
         this.pantry.setImmovable(true)
         this.physics.add.collider(this.player, this.pantry)
-        this.pantryAction = this.add.rectangle((this.tileSize * 5) + offset, (this.tileSize * 6) + (this.tileSize / 2) -10, (this.tileSize*4), this.tileSize, 0x000000, 0)
+        /*this.pantryAction = this.add.rectangle((this.tileSize * 5) + offset, (this.tileSize * 6) + (this.tileSize / 2) -10, (this.tileSize*4), this.tileSize, 0x000000, 0)
         this.physics.add.existing(this.pantryAction, true)
         this.physics.add.overlap(this.player, this.pantryAction, () => {
             if (!this.check) {
@@ -103,21 +111,43 @@ class Kitchen extends Phaser.Scene {
                     console.log("hello")
                 }
             }
-        })
+        })*/
 
         this.fridge.setImmovable(true)
         this.physics.add.collider(this.player, this.fridge)
         this.fridgeAction = this.add.rectangle((this.tileSize * 3 / 2) + offset, (this.tileSize * 6) + (this.tileSize / 2) - 10, (this.tileSize*3), this.tileSize, 0x000000, 0)
         this.physics.add.existing(this.fridgeAction, true)
-        this.physics.add.overlap(this.player, this.fridgeAction, () => {
-            if (Phaser.Input.Keyboard.JustDown(this.keys.space)) {
-                console.log("hello")
-            }
-        })
 
         this.microwave.setImmovable(true)
         this.physics.add.collider(this.player, this.microwave)
 
+    }
+
+    stepHandler() {
+        this.physics.add.overlap(this.player, this.fridgeAction, () => {
+            this.helper = true
+            if (Phaser.Input.Keyboard.JustDown(this.keys.space) && this.step == 1) {
+                this.step = 2
+                console.log(this.step)
+            }
+        })
+
+        this.physics.add.overlap(this.player, this.ovenAction, () => {
+            if (!this.check) {
+                this.helper = true
+                if (Phaser.Input.Keyboard.JustDown(this.keys.space) && this.step == 2) {
+                    this.step = 3
+                    console.log(this.step)
+                } 
+            }
+        })
+
+        this.physics.add.overlap(this.player, this.sinkAction, () => {
+            this.helper = true
+            if (Phaser.Input.Keyboard.JustDown(this.keys.space) && this.step == 3) {
+                console.log("win!")
+            }
+        })
     }
 
     addSkillChecks() {
@@ -151,7 +181,8 @@ class Kitchen extends Phaser.Scene {
             this.player.body.setVelocityY(200)
         } else if (this.keys.up.isDown) {
             this.player.body.setVelocityY(-200)
-        } else if (this.keys.left.isDown) {
+        }
+        if (this.keys.left.isDown) {
             this.player.body.setVelocityX(-200)
         } else if (this.keys.right.isDown) {
             this.player.body.setVelocityX(200)
