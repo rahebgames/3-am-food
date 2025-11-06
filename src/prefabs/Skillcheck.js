@@ -9,7 +9,7 @@ class Skillcheck extends Phaser.GameObjects.Sprite {
         this.limitRight = centerX+200
         
         this.bar = scene.add.rectangle(centerX, centerY, 400, 25, 0xc7c7c7, 1)
-        this.zone = scene.add.rectangle(centerX, centerY, 80, 25, 0xfafafa, 1)
+        this.zone = scene.add.rectangle(centerX, centerY, 80, 25, 0xff0000, 1)
         this.slider = scene.physics.add.sprite(this.limitLeft, centerY, 'slider')
 
         this.speed = 700

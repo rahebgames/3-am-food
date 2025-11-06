@@ -12,6 +12,7 @@ class Kitchen extends Phaser.Scene {
         let playerSize = 84.71
 
         this.addProps()
+        this.propActive = false
 
         this.player = this.physics.add.sprite((this.tileSize*6)+(this.tileSize/2)+offset, (this.tileSize/2)+offset, 'spiderman')
         this.player.body.setSize(700, 1400)
@@ -22,12 +23,16 @@ class Kitchen extends Phaser.Scene {
         this.house.setDisplaySize(w, h)
         this.house.visible = false
 
+        this.addPropCollisions()
         this.addSkillChecks()
-        this.addObstacleCollisions()
     }
 
     update() {
-        this.movementHandler()
+        if (this.check == null) {
+            this.movementHandler()
+        } else {
+            this.player.setVelocity(0)
+        }
         this.skillCheckHandler()
     }
 
@@ -62,24 +67,47 @@ class Kitchen extends Phaser.Scene {
         this.microwave = this.physics.add.sprite((this.tileSize * 3 / 2) + offset, (this.tileSize / 2) + offset, 'microwave')
     }
 
-    addObstacleCollisions() {
+    addPropCollisions() {
         this.table.setImmovable(true)
         this.physics.add.collider(this.player, this.table)
 
         this.oven.setImmovable(true)
         this.physics.add.collider(this.player, this.oven)
+        this.ovenAction = this.add.rectangle((this.tileSize * 4) + offset, (this.tileSize / 2) + offset+20, (this.tileSize*2), this.tileSize, 0x000000, 0)
+        this.physics.add.existing(this.ovenAction, true)
+        this.physics.add.overlap(this.player, this.ovenAction, () => {
+            if (Phaser.Input.Keyboard.JustDown(this.keys.space)) {
+                console.log("hello")
+            }
+        })
 
         this.sink.setImmovable(true)
         this.physics.add.collider(this.player, this.sink)
+        this.sinkAction = this.add.rectangle((this.tileSize / 2) + offset+10, (this.tileSize * 2) + offset+10, this.tileSize, (this.tileSize*2), 0x000000, 0)
+        this.physics.add.existing(this.sinkAction, true)
+        this.physics.add.overlap(this.player, this.sinkAction, () => {
+            if (Phaser.Input.Keyboard.JustDown(this.keys.space)) {
+                console.log("hello")
+            }
+        })
+
 
         this.pantry.setImmovable(true)
         this.physics.add.collider(this.player, this.pantry)
 
         this.fridge.setImmovable(true)
         this.physics.add.collider(this.player, this.fridge)
+        this.fridgeAction = this.add.rectangle((this.tileSize * 3 / 2) + offset, (this.tileSize * 6) + (this.tileSize / 2) - 10, (this.tileSize*3), this.tileSize, 0x000000, 0)
+        this.physics.add.existing(this.fridgeAction, true)
+        this.physics.add.overlap(this.player, this.fridgeAction, () => {
+            if (Phaser.Input.Keyboard.JustDown(this.keys.space)) {
+                console.log("hello")
+            }
+        })
 
         this.microwave.setImmovable(true)
-        this.physics.add.collider(this.player, this.microwave)   
+        this.physics.add.collider(this.player, this.microwave)
+
     }
 
     addSkillChecks() {
