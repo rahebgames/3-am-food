@@ -13,6 +13,19 @@ class Kitchen extends Phaser.Scene {
         this.tileSize = 85.71
         let playerSize = 84.71
 
+        this.creak = this.sound.add('floor-creak', {
+            volume: 2
+        })
+        this.hum = this.sound.add('hum', {
+            loop: true,
+            volume: 0.5
+        })
+        this.clang = this.sound.add('clang', {
+            volume: 0.7
+        })
+        this.scream = this.sound.add('scream', {
+            volume: 1
+        })
         this.step = 1
 
         this.addProps()
@@ -32,6 +45,8 @@ class Kitchen extends Phaser.Scene {
         this.addPropCollisions()
         this.addSkillChecks()
         this.stepHandler()
+
+        this.hum.play()
     }
 
     update() {
@@ -55,12 +70,21 @@ class Kitchen extends Phaser.Scene {
 
             this.pauseTint.destroy()
             this.pauseTint = null
+            
         } else if (this.stoveCheck) {
             this.stoveCheck.update()
         }
 
         if (!this.cheeseGrilled && this.cheeseDone) {
-            this.house.visible = true
+            this.scream.play()
+            this.time.addEvent({
+                delay: 1000,
+                callback: () => {   
+                    this.house.visible = true
+                },
+                callbackScope: this,
+                loop: false,
+            })
         } else if (!this.check && this.cheeseDone) {
             this.step = 3
             //console.log(this.step)
@@ -97,7 +121,15 @@ class Kitchen extends Phaser.Scene {
         }
 
         if (!this.checkPassed && this.checkDone) {
-            this.house.visible = true
+            this.scream.play()
+            this.time.addEvent({
+                delay: 1000,
+                callback: () => {   
+                    this.house.visible = true
+                },
+                callbackScope: this,
+                loop: false,
+            })
         } else if (!this.check && this.checkDone) {
             this.checkDone = false
             this.checkPassed = false
@@ -182,7 +214,9 @@ class Kitchen extends Phaser.Scene {
         this.physics.add.existing(this.tile1, true)
 
         this.tileOneCollider = this.physics.add.overlap(this.player, this.tile1, () => {
+            
             if (!this.check) {
+                this.creak.play()
                 this.activeTile = this.tile1
                 this.pauseTint = this.add.rectangle(centerX, centerY, w, h, 0x000000, 0.5)
                 this.check = new Skillcheck(this, centerX, centerY)
@@ -194,6 +228,7 @@ class Kitchen extends Phaser.Scene {
 
         this.tileTwoCollider = this.physics.add.overlap(this.player, this.tile2, () => {
             if (!this.check) {
+                this.creak.play()
                 this.activeTile = this.tile2
                 this.pauseTint = this.add.rectangle(centerX, centerY, w, h, 0x000000, 0.5)
                 this.check = new Skillcheck(this, centerX, centerY)

@@ -16,6 +16,7 @@ class Stove extends Phaser.GameObjects.Sprite {
         this.scene.physics.add.collider(this.cheese, this.floor, () => {
             if (this.gravity > 50) {
                 this.scene.cheeseDone = true
+                this.scene.clang.play()
             } else {
                 this.scene.cheeseDone = true
                 this.scene.cheeseGrilled = true

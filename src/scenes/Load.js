@@ -16,6 +16,11 @@ class Load extends Phaser.Scene {
         this.load.image('fridge', './assets/fridge.png')
         this.load.image('microwave', './assets/microwave.png')
         this.load.image('grilledCheese', './assets/grilled-cheese.png')
+
+        this.load.audio("floor-creak", './assets/floor-creak.mp3')
+        this.load.audio("hum", './assets/fridge-hum.mp3')
+        this.load.audio('clang', './assets/pan-clang.mp3')
+        this.load.audio('scream', './assets/kid-screaming.mp3')
     }
 
     create() {

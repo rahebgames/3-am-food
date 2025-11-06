@@ -11,6 +11,11 @@ let config = {
             debug: true 
         }
     },
+    audio: {
+        disableWebAudio: false,
+        noAudio: false,
+        autoDetect: true, 
+    },
     scene: [ Load , Kitchen ],
 }
 
