@@ -21,6 +21,7 @@ class Load extends Phaser.Scene {
         this.load.audio("hum", './assets/fridge-hum.mp3')
         this.load.audio('clang', './assets/pan-clang.mp3')
         this.load.audio('scream', './assets/kid-screaming.mp3')
+        this.load.audio('objective', './assets/objective.mp3')
     }
 
     create() {

@@ -8,8 +8,13 @@ class Stove extends Phaser.GameObjects.Sprite {
         this.bar = scene.add.rectangle(centerX, centerY, 25, 400, 0xc7c7c7, 1)
         this.cheese = scene.physics.add.sprite(centerX, centerY-200, 'grilledCheese').setScale(0.5).setSize(300, 100)
 
-        this.gravity = 200      
+        this.gravity = 150      
         this.jump = 50
+
+        this.text = this.scene.add.text(190, 50, "Mash [Space] to slow\ndown the cheese", {
+            textAlign: 'center',
+            fontSize: "24px"
+        })
 
         this.floor = this.scene.add.rectangle(centerX, centerY+200+10, 25, 20, 0x000000, 0)
         this.scene.physics.add.existing(this.floor, true)
@@ -43,5 +48,8 @@ class Stove extends Phaser.GameObjects.Sprite {
 
         this.floor.destroy()
         this.floor = null
+
+        this.text.destroy()
+        this.text = null
     }
 } 

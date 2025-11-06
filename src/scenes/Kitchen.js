@@ -26,6 +26,9 @@ class Kitchen extends Phaser.Scene {
         this.scream = this.sound.add('scream', {
             volume: 1
         })
+        this.objective = this.sound.add('objective', {
+            volume: 1
+        })
         this.step = 1
 
         this.addProps()
@@ -36,6 +39,7 @@ class Kitchen extends Phaser.Scene {
         this.player.setDisplaySize(playerSize, playerSize)
         this.keys = this.input.keyboard.createCursorKeys()
 
+        this.addObjectiveText()
         this.addHelperText()
 
         this.house = this.add.image(centerX, centerY, 'house')
@@ -60,6 +64,32 @@ class Kitchen extends Phaser.Scene {
         this.stoveHandler()
 
         this.helperTextVisible()
+        this.objectiveTextUpdate()
+    }
+
+    objectiveTextUpdate() {
+        if (this.step == 2) {
+            this.objectiveOne.visible = false
+            this.objectiveTwo.visible = true
+        } else if (this.step == 3) {
+            this.objectiveTwo.visible = false
+            this.objectiveThree.visible = true
+        } else if (this.step == 4) {
+            this.winText.visible = true
+        }
+    }
+
+    addObjectiveText() {
+        this.objectiveOne = this.add.text(0, 0, 'Objective: retrieve grilled cheese \ningredients from fridge', textConfig)
+        this.objectiveTwo = this.add.text(0, 0, 'Objective: grill the cheese on the oven', textConfig)
+        this.objectiveTwo.visible = false
+        this.objectiveThree = this.add.text(0, 0, 'Objective: put dishes in the sink', textConfig)
+        this.objectiveThree.visible = false
+        this.winText = this.add.text(200, centerY, "You Win!", {
+            fontSize: "48px",
+            backgroundColor: 'rgba(0, 0, 0, 0.75',
+        })
+        this.winText.visible = false
 
     }
 
@@ -88,11 +118,12 @@ class Kitchen extends Phaser.Scene {
                 callbackScope: this,
                 loop: false,
             })
-        } else if (!this.check && this.cheeseDone) {
+        } else if (!this.stoveCheck && this.cheeseDone) {
             this.step = 3
+            if (!this.objective.isPlaying) this.objective.play()
             //console.log(this.step)
-            this.checkDone = false
-            this.checkPassed = false
+            this.cheeseGrilled = false
+            this.cheeseDone = false
         }
     }
 
@@ -193,6 +224,7 @@ class Kitchen extends Phaser.Scene {
             this.helper = true
             if (Phaser.Input.Keyboard.JustDown(this.keys.space) && this.step == 1) {
                 this.step = 2
+                this.objective.play()
                 console.log(this.step)
             }
         })
@@ -210,7 +242,10 @@ class Kitchen extends Phaser.Scene {
         this.physics.add.overlap(this.player, this.sinkAction, () => {
             this.helper = true
             if (Phaser.Input.Keyboard.JustDown(this.keys.space) && this.step == 3) {
-                console.log("win!")
+                this.step = 4
+                console.log(this.step)
+                if (!this.objective.isPlaying) this.objective.play()
+                this.winText.visible = true
             }
         })
     }
