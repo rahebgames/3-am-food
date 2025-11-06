@@ -15,6 +15,7 @@ class Load extends Phaser.Scene {
         this.load.image('pantry', './assets/pantry.png')
         this.load.image('fridge', './assets/fridge.png')
         this.load.image('microwave', './assets/microwave.png')
+        this.load.image('grilledCheese', './assets/grilled-cheese.png')
     }
 
     create() {

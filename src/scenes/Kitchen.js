@@ -6,6 +6,8 @@ class Kitchen extends Phaser.Scene {
     create() {
         this.checkPassed = false
         this.checkDone = false
+        this.cheeseGrilled = false
+        this.cheeseDone = false
         
         this.activeTile = null
         this.tileSize = 85.71
@@ -38,8 +40,33 @@ class Kitchen extends Phaser.Scene {
         } else {
             this.player.setVelocity(0)
         }
+
         this.skillCheckHandler()
+        this.stoveHandler()
+
         this.helperTextVisible()
+
+    }
+
+    stoveHandler() {
+        if (this.stoveCheck && this.cheeseDone) {
+            this.stoveCheck.delete()
+            this.stoveCheck = null
+
+            this.pauseTint.destroy()
+            this.pauseTint = null
+        } else if (this.stoveCheck) {
+            this.stoveCheck.update()
+        }
+
+        if (!this.cheeseGrilled && this.cheeseDone) {
+            this.house.visible = true
+        } else if (!this.check && this.cheeseDone) {
+            this.step = 3
+            //console.log(this.step)
+            this.checkDone = false
+            this.checkPassed = false
+        }
     }
 
     addHelperText() {
@@ -133,11 +160,11 @@ class Kitchen extends Phaser.Scene {
         })
 
         this.physics.add.overlap(this.player, this.ovenAction, () => {
-            if (!this.check) {
+            if (!this.check && !this.stoveCheck) {
                 this.helper = true
                 if (Phaser.Input.Keyboard.JustDown(this.keys.space) && this.step == 2) {
-                    this.step = 3
-                    console.log(this.step)
+                    this.pauseTint = this.add.rectangle(centerX, centerY, w, h, 0x000000, 0.5)
+                    this.stoveCheck = new Stove(this, centerX, centerY)
                 } 
             }
         })
