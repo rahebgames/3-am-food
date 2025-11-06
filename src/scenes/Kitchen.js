@@ -76,11 +76,14 @@ class Kitchen extends Phaser.Scene {
         }
 
         if (!this.cheeseGrilled && this.cheeseDone) {
-            this.scream.play()
             this.time.addEvent({
                 delay: 1000,
                 callback: () => {   
+                    if (!this.scream.isPlaying) {
+                        this.scream.play()
+                    }                 
                     this.house.visible = true
+                    this.cheeseDone = false
                 },
                 callbackScope: this,
                 loop: false,
@@ -121,11 +124,14 @@ class Kitchen extends Phaser.Scene {
         }
 
         if (!this.checkPassed && this.checkDone) {
-            this.scream.play()
             this.time.addEvent({
                 delay: 1000,
                 callback: () => {   
+                    if (!this.scream.isPlaying) {
+                        this.scream.play()
+                    }                 
                     this.house.visible = true
+                    this.checkDone = false
                 },
                 callbackScope: this,
                 loop: false,
